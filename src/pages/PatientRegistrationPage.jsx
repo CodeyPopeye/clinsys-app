@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import {
   Container, Typography, TextField, Button, Paper, Box, FormControl, FormLabel,
   RadioGroup, FormControlLabel, Radio, Checkbox, FormGroup, Grid, ThemeProvider, createTheme } from '@mui/material';
-import { ref, onValue } from "firebase/database";
+import { ref, onValue, set, push } from "firebase/database";
 import database from '../firebase/firebaseConfig';
 
 
@@ -71,7 +71,36 @@ function PatientRegistrationPage() {
   // Custom theme setup if needed
   const theme = createTheme();
 
-  
+  // For checkboxes:
+const handleCheckboxChange = (event) => {
+  const { name, checked } = event.target;
+  setPatientData(prevState => ({
+    ...prevState,
+    addictions: {
+      ...prevState.addictions,
+      [name]: {
+        ...prevState.addictions[name],
+        checked,
+      }
+    }
+  }));
+};
+
+// For "times per day" inputs:
+const handleFrequencyChange = (event, addictionName) => {
+  const { value } = event.target;
+  setPatientData(prevState => ({
+    ...prevState,
+    addictions: {
+      ...prevState.addictions,
+      [addictionName]: {
+        ...prevState.addictions[addictionName],
+        timesPerDay: value
+      }
+    }
+  }));
+};
+
   const handleSubmit = (event) => {
     event.preventDefault();
 
