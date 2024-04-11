@@ -4,6 +4,7 @@ import {
   RadioGroup, FormControlLabel, Radio, Checkbox, FormGroup, Grid, ThemeProvider, createTheme } from '@mui/material';
 import { ref, onValue, set, push } from "firebase/database";
 import database from '../firebase/firebaseConfig';
+import Snackbar from '@mui/material/Snackbar';
 
 
 
@@ -36,6 +37,9 @@ function PatientRegistrationPage() {
     occupation: '',
     diagnosis: '',
   });
+
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -110,16 +114,15 @@ const handleFrequencyChange = (event, addictionName) => {
 
     // Set the patient data to the new reference
     set(newPatientRef, patientData)
-      .then(() => {
-        // Data saved successfully!
-        console.log('Data sent to the database successfully!');
-        // You might want to reset form state or navigate the user to another page
-      })
-      .catch((error) => {
-        // The write failed...
-        console.error('Error sending data to the database', error);
-        // Handle errors, such as displaying a user-friendly error message
-      });
+    .then(() => {
+      setSnackbarMessage(`Patient ${patientData.name} is now registered.`);
+      setSnackbarOpen(true);
+      // Reset the form or handle navigation as needed
+    })
+    .catch((error) => {
+      console.error('Error sending data to the database', error);
+      // Handle error (e.g., show error message to user)
+    });
   };
 
 
@@ -134,6 +137,12 @@ const handleFrequencyChange = (event, addictionName) => {
             alignItems: 'center',
           }}
         >
+              <Snackbar
+      open={snackbarOpen}
+      autoHideDuration={6000}
+      onClose={() => setSnackbarOpen(false)}
+      message={snackbarMessage}
+    />
           <Paper elevation={6} sx={{ padding: 3, marginTop: 3, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <Typography component="h1" variant="h5">
               Patient Registration
