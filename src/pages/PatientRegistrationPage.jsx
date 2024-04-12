@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import {
   Container, Typography, TextField, Button, Paper, Box, FormControl, FormLabel,
-  RadioGroup, FormControlLabel, Radio, Checkbox, FormGroup, Grid, ThemeProvider, createTheme } from '@mui/material';
+  RadioGroup, FormControlLabel, Radio, Checkbox, FormGroup, Grid, ThemeProvider, createTheme, FormHelperText   } from '@mui/material';
 import { ref, onValue, set, push } from "firebase/database";
 import database from '../firebase/firebaseConfig';
 import Snackbar from '@mui/material/Snackbar';
@@ -38,8 +38,12 @@ function PatientRegistrationPage() {
     diagnosis: '',
   });
 
+  // Registration confirmation pop-up
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
+
+  // Validation of the form
+  const [errors, setErrors] = useState({});
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -48,6 +52,68 @@ function PatientRegistrationPage() {
       [name]: value,
     });
   };
+
+  // function to validate the form data before submission.
+  const validateForm = () => {
+    console.log('Validating form with data:', patientData);
+    const newErrors = {};
+    let isValid = true;
+
+    // Validation for the name field
+    if (!patientData.name.trim()) {
+      isValid = false;
+        newErrors.name = 'Name is required';
+    }
+
+    // Validation for the age field
+    if (!patientData.age.trim()) {
+      isValid = false;
+        newErrors.age = 'Age is required';
+    }
+
+    // Validation for the sex field
+    if (!patientData.sex) {
+      isValid = false;
+        newErrors.sex = 'Sex is required';
+    }
+
+    // Validation for the phone number field
+    if (!patientData.phoneNumber.trim()) {
+      isValid = false;
+        newErrors.phoneNumber = 'Phone number is required';
+    }
+
+    // Add similar validation checks for the other fields
+    if (!patientData.village.trim()) {
+      isValid = false;
+        newErrors.village = 'Village is required';
+    }
+
+    if (!patientData.tehsil.trim()) {
+      isValid = false;
+        newErrors.tehsil = 'Tehsil is required';
+    }
+
+    if (!patientData.district.trim()) {
+      isValid = false;
+        newErrors.district = 'District is required';
+    }
+
+    if (!patientData.state.trim()) {
+      isValid = false;
+        newErrors.state = 'State is required';
+    }
+
+    if (!patientData.country) {
+      isValid = false;
+        newErrors.country = 'Country is required';
+    }
+
+    // Assuming caste, education, and other fields are not mandatory
+
+    setErrors(newErrors);
+    return isValid;
+  }
 
   const handleAddictionChange = (event) => {
     const { name, checked } = event.target;
@@ -105,26 +171,30 @@ const handleFrequencyChange = (event, addictionName) => {
   }));
 };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
+const handleSubmit = (event) => {
+  event.preventDefault();
 
-    // Create a new reference with an auto-generated id
-    const patientRef = ref(database, 'patients');
-    const newPatientRef = push(patientRef);
+  if (!validateForm()) {
+      console.log('Validation failed');
+      // Optionally set state here to inform the user which fields are missing
+      return; // Stop the form submission if validation fails
+  }
 
-    // Set the patient data to the new reference
-    set(newPatientRef, patientData)
-    .then(() => {
-      setSnackbarMessage(`Patient ${patientData.name} is now registered.`);
-      setSnackbarOpen(true);
-      // Reset the form or handle navigation as needed
-    })
-    .catch((error) => {
-      console.error('Error sending data to the database', error);
-      // Handle error (e.g., show error message to user)
-    });
-  };
+  // Proceed with submitting the data to Firebase if validation passes
+  const patientRef = ref(database, 'patients');
+  const newPatientRef = push(patientRef);
 
+  set(newPatientRef, patientData)
+      .then(() => {
+          setSnackbarMessage(`Patient ${patientData.name} is now registered.`);
+          setSnackbarOpen(true);
+          // Reset the form or handle navigation as needed
+      })
+      .catch((error) => {
+          console.error('Error sending data to the database', error);
+          // Handle error (e.g., show error message to user)
+      });
+};
 
   return (
     <ThemeProvider theme={theme}>
@@ -149,6 +219,7 @@ const handleFrequencyChange = (event, addictionName) => {
             </Typography>
             <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
               <TextField
+                required
                 fullWidth
                 id="registrationNumber"
                 label="Registration Number"
@@ -156,6 +227,8 @@ const handleFrequencyChange = (event, addictionName) => {
                 margin="normal"
                 value={patientData.registrationNumber}
                 onChange={handleInputChange}
+                error={!!errors.registrationNumber}
+                helperText={errors.registrationNumber}
               />
               <TextField
                 required
@@ -166,17 +239,21 @@ const handleFrequencyChange = (event, addictionName) => {
                 margin="normal"
                 value={patientData.name}
                 onChange={handleInputChange}
+                error={!!errors.name}
+                helperText={errors.name}
               />
               <TextField
-  required
-  fullWidth
-  id="age"
-  label="Age"
-  name="age"
-  type="number"
-  margin="normal"
-  value={patientData.age}
-  onChange={handleInputChange}
+                required
+                fullWidth
+                id="age"
+                label="Age"
+                name="age"
+                type="number"
+                margin="normal"
+                value={patientData.age}
+                error={!!errors.age}
+                helperText={errors.age}
+                onChange={handleInputChange}
 />
 <FormControl component="fieldset" margin="normal">
   <FormLabel component="legend">Sex</FormLabel>
@@ -200,6 +277,8 @@ const handleFrequencyChange = (event, addictionName) => {
   name="phoneNumber"
   margin="normal"
   value={patientData.phoneNumber}
+  error={!!errors.phoneNumber}
+  helperText={errors.phoneNumber}
   onChange={handleInputChange}
 />
 <TextField
@@ -210,8 +289,11 @@ const handleFrequencyChange = (event, addictionName) => {
   name="village"
   margin="normal"
   value={patientData.village}
+  error={!!errors.village}
+  helperText={errors.village}
   onChange={handleInputChange}
 />
+
 <TextField
   required
   fullWidth
@@ -220,8 +302,11 @@ const handleFrequencyChange = (event, addictionName) => {
   name="tehsil"
   margin="normal"
   value={patientData.tehsil}
+  error={!!errors.tehsil}
+  helperText={errors.tehsil}
   onChange={handleInputChange}
 />
+
 <TextField
   required
   fullWidth
@@ -230,8 +315,11 @@ const handleFrequencyChange = (event, addictionName) => {
   name="district"
   margin="normal"
   value={patientData.district}
+  error={!!errors.district}
+  helperText={errors.district}
   onChange={handleInputChange}
 />
+
 <TextField
   required
   fullWidth
@@ -240,9 +328,12 @@ const handleFrequencyChange = (event, addictionName) => {
   name="state"
   margin="normal"
   value={patientData.state}
+  error={!!errors.state}
+  helperText={errors.state}
   onChange={handleInputChange}
 />
-<FormControl component="fieldset" margin="normal">
+
+<FormControl component="fieldset" margin="normal" error={!!errors.country}>
   <FormLabel component="legend">Country</FormLabel>
   <RadioGroup
     row
@@ -286,9 +377,11 @@ const handleFrequencyChange = (event, addictionName) => {
   type="text"
   margin="normal"
   value={patientData.caste}
+  error={!!errors.caste}
+  helperText={errors.caste}
   onChange={handleInputChange}
 />
-<FormControl component="fieldset" margin="normal">
+<FormControl component="fieldset" margin="normal" error={!!errors.education}>
   <FormLabel component="legend">Education</FormLabel>
   <RadioGroup
     row
@@ -303,6 +396,7 @@ const handleFrequencyChange = (event, addictionName) => {
     <FormControlLabel value="Graduate" control={<Radio />} label="Graduate" />
     <FormControlLabel value="Post Graduate" control={<Radio />} label="Post Graduate" />
   </RadioGroup>
+
 </FormControl>
 <FormControl component="fieldset" margin="normal">
   <FormLabel component="legend">Diet</FormLabel>
@@ -391,6 +485,8 @@ const handleFrequencyChange = (event, addictionName) => {
   type="text"
   margin="normal"
   value={patientData.diagnosis}
+  error={!!errors.diagnosis}
+  helperText={errors.diagnosis}
   onChange={handleInputChange}
 />
 
