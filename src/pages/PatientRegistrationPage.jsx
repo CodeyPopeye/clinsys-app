@@ -281,57 +281,7 @@ const handleSubmit = (event) => {
   helperText={errors.phoneNumber}
   onChange={handleInputChange}
 />
-<TextField
-  required
-  fullWidth
-  id="village"
-  label="Village"
-  name="village"
-  margin="normal"
-  value={patientData.village}
-  error={!!errors.village}
-  helperText={errors.village}
-  onChange={handleInputChange}
-/>
 
-<TextField
-  required
-  fullWidth
-  id="tehsil"
-  label="Tehsil"
-  name="tehsil"
-  margin="normal"
-  value={patientData.tehsil}
-  error={!!errors.tehsil}
-  helperText={errors.tehsil}
-  onChange={handleInputChange}
-/>
-
-<TextField
-  required
-  fullWidth
-  id="district"
-  label="District"
-  name="district"
-  margin="normal"
-  value={patientData.district}
-  error={!!errors.district}
-  helperText={errors.district}
-  onChange={handleInputChange}
-/>
-
-<TextField
-  required
-  fullWidth
-  id="state"
-  label="State"
-  name="state"
-  margin="normal"
-  value={patientData.state}
-  error={!!errors.state}
-  helperText={errors.state}
-  onChange={handleInputChange}
-/>
 
 <FormControl component="fieldset" margin="normal" error={!!errors.country}>
   <FormLabel component="legend">Country</FormLabel>
@@ -357,6 +307,71 @@ const handleSubmit = (event) => {
     )}
   </RadioGroup>
 </FormControl>
+
+
+<FormControl component="fieldset" margin="normal" error={!!errors.state}>
+  <FormLabel component="legend">State</FormLabel>
+  <RadioGroup
+    aria-label="state"
+    name="state"
+    value={patientData.state}
+    onChange={handleInputChange}
+  >
+    <FormControlLabel value="Rajasthan" control={<Radio />} label="Rajasthan" />
+    <FormControlLabel value="Other" control={<Radio />} label="Other" />
+  </RadioGroup>
+  {patientData.state === 'Other' && (
+    <TextField
+      name="otherState"
+      label="Please specify the state"
+      value={patientData.otherState}
+      onChange={handleInputChange}
+      // ... other props like error and helperText if needed
+    />
+  )}
+</FormControl>
+
+
+<TextField
+  required
+  fullWidth
+  id="district"
+  label="District"
+  name="district"
+  margin="normal"
+  value={patientData.district}
+  error={!!errors.district}
+  helperText={errors.district}
+  onChange={handleInputChange}
+/>
+
+<TextField
+  required
+  fullWidth
+  id="tehsil"
+  label="Tehsil"
+  name="tehsil"
+  margin="normal"
+  value={patientData.tehsil}
+  error={!!errors.tehsil}
+  helperText={errors.tehsil}
+  onChange={handleInputChange}
+/>
+
+<TextField
+  required
+  fullWidth
+  id="village"
+  label="Village"
+  name="village"
+  margin="normal"
+  value={patientData.village}
+  error={!!errors.village}
+  helperText={errors.village}
+  onChange={handleInputChange}
+/>
+
+
 <TextField
   required
   fullWidth
@@ -368,6 +383,7 @@ const handleSubmit = (event) => {
   value={patientData.pincode}
   onChange={handleInputChange}
 />
+
 <TextField
   required
   fullWidth
@@ -381,6 +397,7 @@ const handleSubmit = (event) => {
   helperText={errors.caste}
   onChange={handleInputChange}
 />
+
 <FormControl component="fieldset" margin="normal" error={!!errors.education}>
   <FormLabel component="legend">Education</FormLabel>
   <RadioGroup
@@ -396,8 +413,8 @@ const handleSubmit = (event) => {
     <FormControlLabel value="Graduate" control={<Radio />} label="Graduate" />
     <FormControlLabel value="Post Graduate" control={<Radio />} label="Post Graduate" />
   </RadioGroup>
-
 </FormControl>
+
 <FormControl component="fieldset" margin="normal">
   <FormLabel component="legend">Diet</FormLabel>
   <RadioGroup
@@ -476,6 +493,7 @@ const handleSubmit = (event) => {
   value={patientData.occupation}
   onChange={handleInputChange}
 />
+
 <TextField
   required
   fullWidth
