@@ -1,0 +1,42 @@
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  #patientDetails, #patientDetails * {
+    visibility: visible;
+  }
+  #patientDetails {
+    visibility: hidden;
+    position: fixed;
+    left: 20mm;
+    top: 0;
+    width: 100%;
+  }
+
+  /* Individual fields */
+  /* .field-registrationNumber {
+    position: fixed;
+    left: 20mm;
+    top: 10mm;
+    font-size: 12pt;
+  }
+  
+  .field-name {
+    position: fixed;
+    left: 20mm;
+    top: 20mm;
+    font-size: 12pt;
+  }
+
+  .field-date {
+    position: fixed;
+    right: 20mm;
+    top: 10mm;
+    font-size: 12pt;
+  }
+   */
+  /* Hide elements that should not be printed */
+  #printButton {
+    display: none;
+  }
+}

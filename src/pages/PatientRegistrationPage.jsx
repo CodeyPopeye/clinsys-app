@@ -180,15 +180,53 @@ const handleSubmit = (event) => {
       return; // Stop the form submission if validation fails
   }
 
+  // Include the current date and time as a timestamp
+  const submissionTime = new Date().toISOString(); // ISO string format of the current time
+
+  // Add the timestamp to the patient data
+  const dataToSubmit = {
+    ...patientData,
+    timestamp: submissionTime // Include the timestamp
+  };
+
   // Proceed with submitting the data to Firebase if validation passes
   const patientRef = ref(database, 'patients');
   const newPatientRef = push(patientRef);
 
-  set(newPatientRef, patientData)
+  // Use dataToSubmit here instead of patientData
+  set(newPatientRef, dataToSubmit)
       .then(() => {
           setSnackbarMessage(`Patient ${patientData.name} is now registered.`);
           setSnackbarOpen(true);
           // Reset the form or handle navigation as needed
+          // Optionally reset patientData state here if you want to clear the form
+          setPatientData({
+            registrationNumber: '',
+            name: '',
+            age: '',
+            sex: '',
+            phoneNumber: '',
+            village: '',
+            tehsil: '',
+            district: '',
+            state: '',
+            country: 'India',
+            pincode: '',
+            caste: '',
+            education: '',
+            diet: 'Vegetarian',
+            addictions: {
+              Tobacco:   { checked: false, timesPerDay: '' },
+              Cigarette: { checked: false, timesPerDay: '' },
+              Alcohol:   { checked: false, timesPerDay: '' },
+              Gutka:     { checked: false, timesPerDay: '' },
+              Paan:      { checked: false, timesPerDay: '' },
+              Tea:       { checked: false, timesPerDay: '' },
+              Other:     { checked: false, timesPerDay: '' },
+            },
+            occupation: '',
+            diagnosis: '',
+          });
       })
       .catch((error) => {
           console.error('Error sending data to the database', error);

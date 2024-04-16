@@ -37,21 +37,8 @@
   }
 }
 
-@media print {
-  body * {
-    visibility: hidden;
-  }
-  #patientDetails, #patientDetails * {
-    visibility: visible;
-  }
-  #patientDetails {
-    position: fixed;
-    left: 0;
-    top: 0;
-    margin: 0; /* Adjust margin to align with your pre-printed paper */
-    padding: 0; /* Adjust padding as needed */
-  }
-  .MuiButton-root { /* Hide the print button */
-    display: none;
-  }
+/* LandingPage.css */
+
+.welcome-message {
+  font-family: 'Bebas Neue', cursive;
 }
