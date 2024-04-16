@@ -42,49 +42,53 @@ function PatientSearchPage() {
       fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
       lineHeight: '1.5em',
     };
-  
+
     const handlePrint = () => {
-        window.print();
+      window.print();
     };
     return (
-      <Card style={cardStyle}>
-        <CardContent>
-          {/* Replace with actual header/footer content as needed */}
-          <Typography variant="h5" component="div" gutterBottom>
-            Dr. Hemraj Bhardwaj, M.S.
-            <br />
-            General Surgeon
-          </Typography>
-          <Typography variant="body2" component="div">
-            Hadoti Piles Centre (HPC)
-            <br />
-            Baran
-          </Typography>
-          {/* Patient Information in a format similar to the template */}
-          <Typography variant="h6" component="div" sx={{ marginTop: 2 }}>
-            Patient Registration Number: {patient.registrationNumber}
-          </Typography>
-          <Typography variant="body1">Patient's Name: {patient.name}</Typography>
-          <Typography variant="body1">Sex: {patient.sex} Age: {patient.age}</Typography>
-          <Typography variant="body1">Date: {/* Assuming you have a date field in your patient data */}</Typography>
-          <Typography variant="body1">Patient Address: {patient.village}</Typography>
-          <Typography variant="body1">Patient Phone Number: {patient.phoneNumber}</Typography>
-          <Typography variant="body1">Diagnosis: {patient.diagnosis}</Typography>
-          {/* ...include other details as necessary */}
-          <Typography variant="body1" sx={{ marginTop: 2, fontStyle: 'italic' }}>
-            Rx
-          </Typography>
-          {/* Include medication or other prescription details as necessary */}
-          <div style={{ borderTop: '1px solid black', margin: '20px 0' }} />
-          <Typography variant="body1" style={{ textAlign: 'center' }}>Signature</Typography>
-        </CardContent>
-        <Button onClick={handlePrint} variant="contained" color="primary">
-        Print this card
-      </Button>
+      <Card style={{ marginTop: '20px' }} id="patientDetails">
+            <CardContent style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginBottom: '20px' }}>
+                <div> {/* Column 1 */}
+                    <Typography variant="h6" gutterBottom>
+                        Registration Number: {patient.registrationNumber}
+                    </Typography>
+                    <Typography variant="body1">
+                        Patient's Name: {patient.name}
+                    </Typography>
+                    <Typography variant="body1">
+                        Sex: {patient.sex}
+                    </Typography>
+                    <Typography variant="body1">
+                        Age: {patient.age}
+                    </Typography>
+                </div>
+                <div> {/* Column 2 */}
+                    <Typography variant="body1">
+                        Date: {patient.timestamp.toDateString()}
+                    </Typography>
+                    <Typography variant="body1">
+                        Patient Address: {patient.village}
+                    </Typography>
+                    <Typography variant="body1">
+                        Patient Phone Number: {patient.phoneNumber}
+                    </Typography>
+                    <Typography variant="body1">
+                        Diagnosis: {patient.diagnosis}
+                    </Typography>
+                </div>
+                <div style={{ gridColumn: '1 / -1', textAlign: 'left' }}> {/* Full width */}
+                    <Typography variant="body1" style={{ marginTop: '20px', fontStyle: 'italic' }}>
+                        Rx
+                    </Typography>
+                </div>
+            </CardContent>
+        <Button id="printButton" onClick={() => window.print()}>
+          Print this card
+        </Button>
       </Card>
     );
   };
-  
 //   export default PatientDetailsCard;
 
   function handleSearch(event) {
