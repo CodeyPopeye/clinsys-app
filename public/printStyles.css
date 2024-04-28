@@ -8,7 +8,7 @@
   #patientDetails {
     visibility: hidden;
     position: fixed;
-    left: 20mm;
+    left: 0;
     top: 0;
     width: 100%;
   }
