@@ -65,7 +65,7 @@ function PatientSearchPage() {
                 </div>
                 <div> {/* Column 2 */}
                     <Typography variant="body1">
-                        Date: {patient.timestamp.toDateString()}
+                        Date: {new Date(patient.timestamp).toLocaleDateString('en-GB')}
                     </Typography>
                     <Typography variant="body1">
                         Patient Address: {patient.village}

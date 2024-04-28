@@ -39,7 +39,7 @@ function LandingPage() {
                     <Button
                         fullWidth
                         variant="contained"
-                        onClick={() => navigateTo('/search')}
+                        onClick={() => navigateTo('/patients')}
                     >
                         Search & Print
                     </Button>
